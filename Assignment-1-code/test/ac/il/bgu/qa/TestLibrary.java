@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -203,7 +204,7 @@ public class TestLibrary {
         when(databaseService.getUserById(VALID_USER_ID)).thenReturn(existing);
 
         assertThrows(IllegalArgumentException.class, () -> library.registerUser(existing));
-        verify(databaseService, never()).registerUser(anyString(), existing);
+        verify(databaseService, never()).registerUser(anyString(), any(User.class));
     }
 
     @Test
@@ -262,6 +263,7 @@ public class TestLibrary {
         Book book = createValidBook();
         book.borrow();
         when(databaseService.getBookByISBN(VALID_ISBN)).thenReturn(book);
+        when(databaseService.getUserById(VALID_USER_ID)).thenReturn(createValidUser());
 
         assertThrows(BookAlreadyBorrowedException.class, () -> library.borrowBook(VALID_ISBN, VALID_USER_ID));
     }
@@ -487,7 +489,5 @@ public class TestLibrary {
         return new User(VALID_USER_NAME, VALID_USER_ID, notificationService);
     }
 }
-
-
 
 
