@@ -209,13 +209,14 @@ public class TestLibrary {
 
     @Test
     void GivenValidRequest_WhenBorrowBook_ThenSucceed() {
-        Book book = createValidBook();
+        Book book = spy(createValidBook());
         when(databaseService.getBookByISBN(VALID_ISBN)).thenReturn(book);
         when(databaseService.getUserById(VALID_USER_ID)).thenReturn(createValidUser());
 
         library.borrowBook(VALID_ISBN, VALID_USER_ID);
 
         assertTrue(book.isBorrowed());
+        verify(book).borrow();
         verify(databaseService).borrowBook(VALID_ISBN, VALID_USER_ID);
     }
 
@@ -270,13 +271,14 @@ public class TestLibrary {
 
     @Test
     void GivenValidISBN_WhenReturnBook_ThenSuccess() {
-        Book book = new Book(VALID_ISBN, "Clean Code", "Robert Martin");
+        Book book = spy(createValidBook());
         book.borrow();
         when(databaseService.getBookByISBN(VALID_ISBN)).thenReturn(book);
 
         library.returnBook(VALID_ISBN);
 
         assertFalse(book.isBorrowed());
+        verify(book).returnBook();
         verify(databaseService).returnBook(VALID_ISBN);
     }
 
@@ -289,7 +291,7 @@ public class TestLibrary {
 
     @Test
     void GivenValidISBNButBookNotBorrowed_WhenReturnBook_ThenThrowBookNotBorrowedException() {
-        Book book = new Book(VALID_ISBN, "Clean Code", "Robert Martin");
+        Book book = createValidBook();
         when(databaseService.getBookByISBN(VALID_ISBN)).thenReturn(book);
 
         assertThrows(BookNotBorrowedException.class, () -> library.returnBook(VALID_ISBN));
@@ -482,7 +484,7 @@ public class TestLibrary {
 
     private Book createValidBook() {
         return new Book(VALID_ISBN, VALID_TITLE, VALID_AUTHOR);
-   }
+    }
    
     private User createValidUser() {
         NotificationService notificationService = mock(NotificationService.class);
