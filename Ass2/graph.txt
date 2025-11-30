@@ -1,0 +1,46 @@
+strict digraph G {
+
+ 1  [ label="1: Start" shape="box" ];
+ 2  [ label="2: sout('A simple statement code')" shape="box" ];
+
+ 3  [ label="3: x == 3" shape="diamond" ];
+ 4  [ label="4: sout('A simple statement code')" shape="box" ];
+ 5  [ label="5: sout('A simple statement code')" shape="box" ];
+ 6  [ label="6: sout('A simple statement code')" shape="box" ];
+ 7  [ label="7: sout('Some more code')" shape="box" ];
+
+ 8  [ label="8" shape="circle" ];
+
+ 9  [ label="9: y == 0" shape="diamond" ];
+ 10 [ label="10: x < 4" shape="diamond" ];
+
+ 11 [ label="11: sout('A simple statement code')" shape="box" ];
+
+ 12 [ label="12" shape="circle" ];
+ 13 [ label="13: End" shape="box" ];
+
+ 1  -> 2  [ label="T" ];
+
+ 2  -> 3  [ label="T" ];
+
+ 3  -> 4  [ label="T" ];
+ 3  -> 7  [ label="F" ];
+
+ 4  -> 5  [ label="T" ];
+ 5  -> 6  [ label="T" ];
+ 6  -> 8  [ label="T" ];
+
+ 7  -> 8  [ label="T" ];
+
+ 8  -> 9  [ label="T" ];
+
+ 9  -> 10 [ label="T" ];
+ 9  -> 12 [ label="F" ];
+
+ 10 -> 11 [ label="T" ];
+ 10 -> 12 [ label="F" ];
+
+ 11 -> 8  [ label="T" ];
+
+ 12 -> 13 [ label="T" ];
+}
